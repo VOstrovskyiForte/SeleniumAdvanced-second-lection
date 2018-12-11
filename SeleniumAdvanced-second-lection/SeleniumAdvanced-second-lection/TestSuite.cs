@@ -39,29 +39,33 @@ namespace SeleniumAdvanced_second_lection
 
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
 
-            var imagesList = driver.FindElement(By.Id("gridMulti"));           
+            var imagesList = driver.FindElement(By.Id("gridMulti"));
 
-            bool isBottomOfPage = false;
+            bool isAtBottom = false;
 
-            while (!isBottomOfPage)
+            while (!isAtBottom)
             {
-                long prevPosition = (long)executor.ExecuteScript("return arguments[0].scrollTop", imagesList);
-                executor.ExecuteScript("arguments[0].scrollIntoView()", imagesList);
-                long currentPosition = (long)executor.ExecuteScript("return arguments[0].scrollTop", imagesList);
-                if (prevPosition == currentPosition)
-                    isBottomOfPage = true;
+                executor.ExecuteScript(@"window.scrollTo(0, document.querySelector('body').scrollHeight)");
+                long currentPosition = (long)executor.ExecuteScript("return document.documentElement.scrollTop");
+                long windowVisiblePartHeight = (long)executor.ExecuteScript("return window.innerHeight");
+                long fullDocumentHeight = (long)executor.ExecuteScript("return document.documentElement.scrollHeight");
+                if (currentPosition + windowVisiblePartHeight == fullDocumentHeight)
+                {
+                    isAtBottom = true;
+                }
             }
 
-            var photosDownloadButtons = driver.FindElements(By.XPath("//a[@title='Download photo']//span"));
+            var photosDownloadButtons = driver.FindElements(By.XPath("//a[@title='Download photo']/span"));
 
             IWebElement lastPhotoDownloadButton = null;
+            int lastPhotoDownloadButtonPosition = 0;
 
-            foreach(IWebElement element in photosDownloadButtons)
+            foreach (IWebElement element in photosDownloadButtons)
             {
-                if (element.Displayed)
+                if (element.Location.Y > lastPhotoDownloadButtonPosition)
                 {
                     lastPhotoDownloadButton = element;
-                    break;
+                    lastPhotoDownloadButtonPosition = element.Location.Y;
                 }
             }
 
