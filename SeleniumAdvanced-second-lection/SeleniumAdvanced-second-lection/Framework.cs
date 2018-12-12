@@ -12,6 +12,8 @@ namespace SeleniumAdvanced_second_lection
     {
 
 
+        //It verifies whether it is the bottom by calculating the position
+        // Does not work normally without Thread.Sleep
         public static void ScrollToBottomByPosition(this IJavaScriptExecutor executor)
         {
             bool isAtBottom = false;
@@ -26,10 +28,13 @@ namespace SeleniumAdvanced_second_lection
                 if (currentPosition + windowVisiblePartHeight == fullDocumentHeight)
                 {
                     isAtBottom = true;
+                    break;
                 }
             }
         }
 
+        //Verifies whether it is bottom of page by searching for "Make something awesome"
+        // label. It works without Thread.Sleep but depends on existing of this label
         public static void ScrollToBottomByFindingElement(this IJavaScriptExecutor executor, IWebDriver driver)
         {
             bool isBottomButtonVisible = false;

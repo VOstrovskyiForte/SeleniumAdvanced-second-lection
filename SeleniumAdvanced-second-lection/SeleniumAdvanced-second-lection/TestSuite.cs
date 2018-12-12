@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,16 +16,17 @@ namespace SeleniumAdvanced_second_lection
     class TestSuite
     {
         private IWebDriver driver;
-        IJavaScriptExecutor executor;
+        private IJavaScriptExecutor executor;
+        private string downloadPath;
 
 
         [SetUp]
         public void SetUp()
         {
             ChromeOptions options = new ChromeOptions();
-            string downloadPath = Path.Combine(@"C:\", "SeleniumDownloads", DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss"));
+            downloadPath = Path.Combine(@"C:\", "SeleniumDownloads", DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss"));
             options.AddUserProfilePreference("download.default_directory", downloadPath);
-            //options.AddArgument("--start-fullscreen");
+            options.AddArgument("--start-fullscreen");
             driver = new ChromeDriver(options);
             
         }
@@ -38,28 +40,39 @@ namespace SeleniumAdvanced_second_lection
 
             executor = (IJavaScriptExecutor)driver;
 
-            //var imagesList = driver.FindElement(By.Id("gridMulti"));
+            //To scroll to the bottom of page,
+            //can use any of these two methods by uncommenting one of them, 
+            // details in Framework.cs :
 
             executor.ScrollToBottomByFindingElement(driver);
+            //executor.ScrollToBottomByPosition();
 
-            var photosDownloadButtons = driver.FindElements(By.XPath("//a[@title='Download photo']/span"));
+            var downloadPhotoButtons = driver.FindElements(By.XPath("//a[@title='Download photo']/span"));
 
-            IWebElement lastPhotoDownloadButton = null;
-            int lastPhotoDownloadButtonPosition = 0;
+            //Search for the lowest download button by comparing their positions
+            IWebElement lastDownloadPhotoButton = null;
+            int lastDownloadPhotoButtonPosition = 0;
 
-            foreach (IWebElement element in photosDownloadButtons)
+            foreach (IWebElement element in downloadPhotoButtons)
             {
-                if (element.Location.Y > lastPhotoDownloadButtonPosition)
+                if (element.Location.Y > lastDownloadPhotoButtonPosition)
                 {
-                    lastPhotoDownloadButton = element;
-                    lastPhotoDownloadButtonPosition = element.Location.Y;
+                    lastDownloadPhotoButton = element;
+                    lastDownloadPhotoButtonPosition = element.Location.Y;
                 }
             }
 
-            if (lastPhotoDownloadButton != null)
-                executor.ExecuteScript($"arguments[0].click()", lastPhotoDownloadButton);
+            if (lastDownloadPhotoButton != null)
+                executor.ExecuteScript($"arguments[0].click()", lastDownloadPhotoButton);
             else
                 throw new Exception("Last photo download button is not found");
+
+            //Wait until file is downloaded
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.Until(p => (Directory.Exists(@downloadPath) && (Directory.GetFiles(downloadPath).Length > 0)));
+
+            int numberOfFilesInCurrentDownloadFolder = Directory.GetFiles(@downloadPath).Length;
+            Assert.That(numberOfFilesInCurrentDownloadFolder, Is.EqualTo(1));
 
         }
 
