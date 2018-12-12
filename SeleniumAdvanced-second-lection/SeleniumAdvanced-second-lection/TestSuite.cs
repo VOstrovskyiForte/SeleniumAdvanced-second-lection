@@ -32,7 +32,7 @@ namespace SeleniumAdvanced_second_lection
         }
 
         [Test]
-        public void SeleniumAdvancedSimpleTest()
+        public void SeleniumAdvancedSecondLectionTest()
         {
 
 
