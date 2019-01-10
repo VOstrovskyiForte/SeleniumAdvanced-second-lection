@@ -79,7 +79,7 @@ namespace SeleniumAdvanced_second_lection
         [TearDown]
         public void TearDown()
         {
-            driver.Close();
+            driver.Dispose();
         }
     }
 }
