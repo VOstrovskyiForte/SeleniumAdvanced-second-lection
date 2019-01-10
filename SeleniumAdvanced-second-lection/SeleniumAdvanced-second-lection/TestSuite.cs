@@ -34,7 +34,7 @@ namespace SeleniumAdvanced_second_lection
         [Test]
         public void SeleniumAdvancedSecondLectionTest()
         {
-
+            int a;
 
             driver.Navigate().GoToUrl(@"https://unsplash.com/search/photos/test");
 
