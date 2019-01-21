@@ -32,9 +32,10 @@ namespace SeleniumAdvanced_second_lection
         }
 
         [Test]
+        [Category("FirstTest")]
         public void SeleniumAdvancedSecondLectionTest()
         {
-            int a;
+            //int a;
 
             driver.Navigate().GoToUrl(@"https://unsplash.com/search/photos/test");
 
@@ -74,6 +75,13 @@ namespace SeleniumAdvanced_second_lection
             int numberOfFilesInCurrentDownloadFolder = Directory.GetFiles(@downloadPath).Length;
             Assert.That(numberOfFilesInCurrentDownloadFolder, Is.EqualTo(1));
 
+        }
+
+        [Test]
+        [Category("SecondTest")]
+        public void SecondTest()
+        {
+            Assert.IsTrue(1 == 2);
         }
 
         [TearDown]

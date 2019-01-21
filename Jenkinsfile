@@ -7,19 +7,20 @@ properties([
 def isFailed = false
 def branch = params.branchName
 def buildArtifactsFolder = "C:/BuildPackagesFromPipeline/$BUILD_ID"
+def pathToDllFile = "$buildArtifactsFolder/SeleniumAdvanced-second-lection.dll"
 currentBuild.description = "Branch: $branch"
 
 def RunNUnitTests(String pathToDll, String condition, String reportName)
 {
     try
     {
-        bat "C:/Dev/NUnit.Console-3.9.0/nunit3-console.exe $pathToDll $condition --result=$reportName"
+        bat "C:/Program Files (x86)/NUnit.org/nunit-console/nunit3-console.exe $pathToDll $condition --result=$reportName"
     }
     finally
     {
         stash name: reportName, includes: reportName
     }
-}/
+}
 
 node('master') 
 {
@@ -40,7 +41,7 @@ node('master')
 
     stage('Copy Artifacts')
     {
-        bat "(robocopy src/PhpTravels.UITests/bin/Debug $buildArtifactsFolder /MIR /XO) ^& IF %ERRORLEVEL% LEQ 1 exit 0"
+        bat "(robocopy SeleniumAdvanced-second-lection/SeleniumAdvanced-second-lection/bin/Debug $buildArtifactsFolder /MIR /XO) ^& IF %ERRORLEVEL% LEQ 1 exit 0"
     }
 }
 
@@ -51,11 +52,11 @@ catchError
     {
         parallel FirstTest: {
             node('master') {
-                RunNUnitTests("$buildArtifactsFolder/PhpTravels.UITests.dll", "--where cat==FirstTest", "TestResult1.xml")
+                RunNUnitTests($pathToDllFile, "--where cat==FirstTest", "TestResult1.xml")
             }
         }, SecondTest: {
             node('Slave') {
-                RunNUnitTests("$buildArtifactsFolder/PhpTravels.UITests.dll", "--where cat==SecondTest", "TestResult2.xml")
+                RunNUnitTests($pathToDllFile, "--where cat==SecondTest", "TestResult2.xml")
             }
         }
     }
