@@ -8,6 +8,7 @@ def isFailed = false
 def branch = params.branchName
 def buildArtifactsFolder = "C:/BuildPackagesFromPipeline/$BUILD_ID"
 def pathToDllFile = "$buildArtifactsFolder/SeleniumAdvanced-second-lection.dll"
+def nugetPath = "C:/Program Files (x86)/Jenkins/apps/nuget.exe"
 currentBuild.description = "Branch: $branch"
 
 def RunNUnitTests(String pathToDll, String condition, String reportName)
@@ -31,7 +32,7 @@ node('master')
     
     stage('Restore NuGet')
     {
-        bat '"C:/Dev/nuget.exe" restore src/PhpTravels.UITests.sln'
+        bat '$nugetPath restore SeleniumAdvanced-second-lection/SeleniumAdvanced-second-lection.sln'
     }
 
     stage('Build Solution')
