@@ -32,7 +32,8 @@ namespace SeleniumAdvanced_second_lection
         }
 
         [Test]
-        [Category("FirstTest")]
+        [Ignore("not used in homework")]
+        //[Category("FirstTest")]
         public void SeleniumAdvancedSecondLectionTest()
         {
             //int a;
@@ -75,6 +76,13 @@ namespace SeleniumAdvanced_second_lection
             int numberOfFilesInCurrentDownloadFolder = Directory.GetFiles(@downloadPath).Length;
             Assert.That(numberOfFilesInCurrentDownloadFolder, Is.EqualTo(1));
 
+        }
+
+        [Test]
+        [Category("FirstTest")]
+        public void FirstTest()
+        {
+            Assert.IsTrue(1 == 1);
         }
 
         [Test]
