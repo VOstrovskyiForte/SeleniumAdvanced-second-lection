@@ -26,7 +26,7 @@ node('master')
 {
     stage('Checkout')
     {
-        git branch: branch, url: 'https://github.com/PixelScrounger/atata-phptravels-uitests.git'
+        git branch: branch, url: 'https://github.com/VOstrovskyiForte/SeleniumAdvanced-second-lection.git'
     }
     
     stage('Restore NuGet')
