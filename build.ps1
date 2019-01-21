@@ -5,6 +5,15 @@ param
     [Parameter()]
     [String[]] $TaskList = @("RestorePackages", "Build", "CopyArtifacts"),
     
+	[Parameter()]
+	[String] $Configuration = "Debug",
+	
+	[Parameter()]
+	[String] $Platform = "Any CPU",
+	
+	[Parameter()]
+	[String] $OutputPath = "bin\Debug",
+	
     # Also add following parameters: 
     #   Configuration
     #   Platform
@@ -41,7 +50,9 @@ Function RestoreNuGetPackages()
 Function BuildSolution()
 {
     Write-Output "Building '$Solution' solution..."
+	bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe" SeleniumAdvanced-second-lection/SeleniumAdvanced-second-lection.sln /p:Configuration=$Configuration /p:Platform=$Platform /p:OutputPath=OutputPath'
     # MSBuild.exe call here
+
 }
 
 Function CopyBuildArtifacts()
