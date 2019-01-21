@@ -19,7 +19,7 @@ def RunNUnitTests(String pathToDll, String condition, String reportName)
     {
         stash name: reportName, includes: reportName
     }
-}
+}/
 
 node('master') 
 {
@@ -35,7 +35,7 @@ node('master')
 
     stage('Build Solution')
     {
-        bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin/MSBuild.exe" src/PhpTravels.UITests.sln'
+        bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe" SeleniumAdvanced-second-lection/SeleniumAdvanced-second-lection.sln'
     }
 
     stage('Copy Artifacts')

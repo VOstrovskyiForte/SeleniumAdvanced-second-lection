@@ -14,7 +14,7 @@ param
 	[Parameter()]
 	[String] $OutputPath = "bin\Debug",
 	
-    # Also add following parameters: 
+    # --Also add following parameters: 
     #   Configuration
     #   Platform
     #   OutputPath
@@ -29,7 +29,9 @@ param
 
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 $NugetExe = Join-Path $PSScriptRoot "nuget.exe"
-# Define additional variables here (MSBuild path, etc.)
+$MSBuildPath = "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe"
+$SolutionPath = "SeleniumAdvanced-second-lection/SeleniumAdvanced-second-lection.sln"
+# --Define additional variables here (MSBuild path, etc.)
 
 Function DownloadNuGet()
 {
@@ -44,14 +46,15 @@ Function RestoreNuGetPackages()
 {
     DownloadNuGet
     Write-Output 'Restoring NuGet packages...'
-    # NuGet.exe call here
+	bat $NugetExe restore $SolutionPath
+    # --NuGet.exe call here
 }
 
 Function BuildSolution()
 {
     Write-Output "Building '$Solution' solution..."
-	bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe" SeleniumAdvanced-second-lection/SeleniumAdvanced-second-lection.sln /p:Configuration=$Configuration /p:Platform=$Platform /p:OutputPath=OutputPath'
-    # MSBuild.exe call here
+	bat $MSBuildPath $SolutionPath /p:Configuration=$Configuration /p:Platform=$Platform /p:OutputPath=OutputPath
+    # --MSBuild.exe call here
 
 }
 
